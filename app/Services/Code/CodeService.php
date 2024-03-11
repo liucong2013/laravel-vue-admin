@@ -9,6 +9,7 @@ use App\Services\Service;
 use App\Utils\ResultHelper;
 use Illuminate\Support\Facades\Storage;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Symfony\Component\HttpFoundation\Response;
 
 class CodeService extends Service
@@ -97,12 +98,37 @@ class CodeService extends Service
         $addResult = $this->createRunAdd($randCode, $batch);
 
         if (!empty($addResult)) {
+            //这里可以用dispatch延迟执行
+            $this->createQRCodeImg($randCode , $batch);
             $result = $this->success(Response::HTTP_OK, '数据写入成功,请耐心等待二维码生成');
         } else {
             $result = $this->failed(Response::HTTP_INTERNAL_SERVER_ERROR, trans('插入失败,请重新操作'));
         }
 
         return $result;
+    }
+
+    //生成二维码
+    public function createQRCodeImg($randCode , $batch = null)
+    {
+
+        $directory = storage_path('app/public/qrcodes/'.$batch);
+
+        // 如果目录不存在，则创建目录
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+
+        //创建二维码
+        foreach ($randCode as $val) {
+            $filename = 'qrcode_' . $val . '.png'; // 设置文件名
+            $path = $directory . '/' . $filename;
+
+            // 生成二维码
+            QrCode::format('png')->size(200)->generate($val, $path);
+        }
+
     }
 
     public function createRunAdd($randCode, $batch)

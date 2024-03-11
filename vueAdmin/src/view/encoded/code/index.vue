@@ -4,7 +4,7 @@
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item>
-          <el-input v-model="searchInfo.codeNumber" placeholder="查询编码" clearable
+          <el-input v-model="searchInfo.code" placeholder="查询编码" clearable
                     :style="{ width: '100%' }"></el-input>
         </el-form-item>
 

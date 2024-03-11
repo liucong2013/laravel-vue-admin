@@ -84,11 +84,11 @@ class CodeExport implements FromCollection , WithEvents , WithDrawings
             ->get()->toArray();
 
 
+
         if(!empty($data)){
             foreach ($data as $val){
+                $this->code_file[] = Storage::url('qrcodes/'.$this->param['batch'].'/qrcode_' . $val['code'] . '.png');
                 $val['code'] = chunk_split($val['code'] , 4 , ' ');
-                $this->code_file[] = Storage::url('qrCode/1/1674664982775.jpg');
-
 
                 $cellData[] = $val;
             }
@@ -101,7 +101,7 @@ class CodeExport implements FromCollection , WithEvents , WithDrawings
     public function drawings()
     {
         $result = [];
-        (new Drawing())->setHeight();
+        (new Drawing())->setHeight(150);
         foreach ($this->code_file as $k => $v) {
             $k += 2;
             ${'drawing' . $k} = new Drawing();
@@ -110,7 +110,7 @@ class CodeExport implements FromCollection , WithEvents , WithDrawings
             //图片路径
             ${'drawing' . $k}->setPath(public_path($v));
             ${'drawing' . $k}->setHeight(150);
-            ${'drawing' . $k}->setVertical('middle');
+           // ${'drawing' . $k}->setVertical('middle');
             //设置图片列
             ${'drawing' . $k}->setCoordinates('B' . $k);
 
