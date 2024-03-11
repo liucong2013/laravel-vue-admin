@@ -101,7 +101,8 @@ class CodeExport implements FromCollection , WithEvents , WithDrawings
     public function drawings()
     {
         $result = [];
-        (new Drawing())->setHeight(150);
+        $defaultWidth = 150; // 设置二维码宽度
+        $defaultHeight = 150; // 设置二维码高度
         foreach ($this->code_file as $k => $v) {
             $k += 2;
             ${'drawing' . $k} = new Drawing();
@@ -109,8 +110,11 @@ class CodeExport implements FromCollection , WithEvents , WithDrawings
             ${'drawing' . $k}->setDescription('二维码');
             //图片路径
             ${'drawing' . $k}->setPath(public_path($v));
-            ${'drawing' . $k}->setHeight(150);
-           // ${'drawing' . $k}->setVertical('middle');
+            ${'drawing' . $k}->setWidth($defaultWidth);
+            ${'drawing' . $k}->setHeight($defaultHeight);
+            //设置图片居中显示
+            ${'drawing' . $k}->setOffsetX(30); //水平居中
+            ${'drawing' . $k}->setOffsetY(30); //垂直居中
             //设置图片列
             ${'drawing' . $k}->setCoordinates('B' . $k);
 
